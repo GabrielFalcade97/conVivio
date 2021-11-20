@@ -1,0 +1,27 @@
+[
+    {
+        "id": 1,
+        "title": "Salão de festa",
+        "descricao": "Espaço para realização de festas/eventos dos moradores do condomínio e visitantes",
+        "lotacao": 75,
+        "img": "https://www.hoteltaiyo.com.br/wp-content/uploads/2017/11/Salao_de_festa-768x512.jpg"
+
+    },
+    {
+        "id": 2,
+        "title": "Churrasqueira",
+        "descricao": "Espaço para realização de churrascos dos moradores do condomínio e visitantes",
+        "lotacao": 30,
+        "img": "https://cobrire.com.br/wp-content/uploads/2020/07/quiosque-telha-churrasqueira-yarea-lazer-condominio-300x201.jpg"
+
+    },
+    {
+        "id": 3,
+        "title": "Quadra de Esportes",
+        "descricao": "Espaço para jogos de quadra para os moradores do condomínio e visitantes",
+        "lotacao": 10,
+        "img": "https://polyesportiva.com.br//storage/app/uploads/QAZOIVq6Wwid3O1gEEZzvClYIOOXQievvWAXqFW2.jpeg"
+
+    }
+   
+]
