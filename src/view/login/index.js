@@ -4,18 +4,15 @@ import { View,
          Button, 
          StyleSheet, 
          ActivityIndicator, 
-         Alert
         } from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
 import FormRow from '../../components/FormRow/FormRow';
-import firebase from '../../services/firebaseConnection';
-// import firebase from '@react-native-firebase/app';
-// import auth from "@react-native-firebase/auth";
+import {connect} from 'react-redux';
+
+import { acessoLogin } from '../../actions';
 
 
-
-
-export default class Login extends React.Component {
+class Login extends React.Component {
 
     constructor(props) {
         super(props);
@@ -37,52 +34,25 @@ export default class Login extends React.Component {
 
     acessoLogin(){ 
         this.setState({ isLoading: true });
+        const{email, password} = this.state;  
 
-        const{email, password} = this.state;
-
-        const loginUserSuccess = user =>{
-            this.setState({message: "Sucesso!"});
-            this.props.navigation.navigate('Home', {user: user});  //verificar se entra
-        }
-        const loginUserFaill = error =>{
-            this.setState({message: this.getMessageByError(error.code)});
-        }
-
-        firebase.auth()
-        .signInWithEmailAndPassword(email, password)
-        .then(loginUserSuccess)
-        .catch(error => {
-            alert (error)
-            if(error.cod == "auth/user-not-found"){
-                Alert.alert(
-                    "Usuário não encontrado", //titulo do alerta
-                    "Deseja criar um novo usuário?", //msg do alerta
-                    [    //array de objs
-                        {
-                        text: 'Não',
-                        onPress: () => {
-                            console.log('Usuário não deseja nova conta')
-                        }
-                        },
-                        {
-                        text: 'Sim',
-                        onPress: ()=> {
-                            firebase
-                                .auth()
-                                .createUserWithEmailAndPassword(email, password)
-                                .then(loginUserSuccess)
-                                .catch(loginUserFaill)
-                        }
-                        },
-                    ],
-                    {cancelable: true}
-                );
-            }
-            loginUserFaill
-        })
-        .then(() => {
-            this.setState({isLoading: false});
-        })
+        this.props.acessoLogin({email, password})
+         .then( user => {
+             if(user){
+            this.props.navigation.replace('Home');
+            } else {
+                this.setState({
+                    isLoading: false,
+                    message: '',
+                })
+            }  
+         })
+         .catch(error => {
+            this.setState({
+                isLoading: false,
+                message: this.getMessageByError(error.code)
+                });
+         })
     }
 
     getMessageByError(code){
@@ -98,8 +68,7 @@ export default class Login extends React.Component {
 
     renderButton(){
         if(this.state.isLoading)
-            return <ActivityIndicator />
-            
+            return <ActivityIndicator />    
         return(
             <Button 
                 title="ENTRAR" 
@@ -124,6 +93,7 @@ export default class Login extends React.Component {
     render() {
         return (
             <View>
+                <Text>ConVivio</Text>
                 <FormRow>
                     <TextInput
                         style={styles.textInput}
@@ -132,6 +102,8 @@ export default class Login extends React.Component {
                         onChangeText={valor => {
                             this.onChangeHandler('email', valor)
                         }}
+                        keyboardType="email-address"
+                        autoCapitalize="none"
                     />
                 </FormRow>
 
@@ -168,3 +140,5 @@ const styles = StyleSheet.create({
         paddingRight: 10,
     }
 })
+
+export default connect(null, {acessoLogin})(Login);

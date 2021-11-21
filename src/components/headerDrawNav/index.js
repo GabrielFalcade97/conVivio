@@ -1,16 +1,16 @@
 import * as React from 'react'; 
 import {StyleSheet, View, Text} from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-
+import { NavigationContainer, DrawerActions } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 Icon.loadFont();
 
-export default function HeaderDrawNav({title, navigation}) {
+export default function HeaderDrawNav({ title, navigation}) {
     return(
         <View style={styles.container}>
             <View style={styles.containerButton}>
-            <TouchableOpacity style={styles.button} onPress={()=>{navigation.openDrawer()}} > 
+            <TouchableOpacity style={styles.button} onPress={() => navigation.dispatch(DrawerActions.toggleDrawer())} > 
                     <Icon name="bars" size={25} color="#ece1e1" />
             </TouchableOpacity>
             </View>

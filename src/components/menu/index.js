@@ -16,7 +16,7 @@ const Drawer = createDrawerNavigator();
 export default function Menu() {
     return(
         <Drawer.Navigator 
-        initialRouteName= "Home"
+        initialRouteName= "Ambiente" //troca pra login
             drawerStyle={styles.drawerStyle}
             screenOptions={{labelStyle: {color: "#ece1e1", fontSize: 18}}}   
             drawerContent={props => <CustomDrawerContent {...props} />}
