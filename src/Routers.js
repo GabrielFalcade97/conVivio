@@ -1,5 +1,4 @@
 import React from 'react';
-import {StyleSheet} from 'react-native';
 
 import Login from './view/login';
 import Menu from './components/menu';
@@ -38,12 +37,13 @@ const Drawer = createDrawerNavigator();
 const App: () => React$Node = () => {
   return (
       <NavigationContainer>
-        <Menu/>
+         <Menu/> 
         {/* <Drawer.Navigator drawerContent={props => <CustomDrawerContent {...props} />}>
-          <Drawer.Screen name="Ambiente" component={Ambiente} options={{headerShown: false}} /> 
+         
           <Drawer.Screen name="Login" component={Login} options={ {headerShown: false} } />
           <Drawer.Screen name="Menu" component={Menu} options={ {headerShown: false} } />
           <Drawer.Screen name="Home" component={Home} options={ {headerShown: false} } />
+          <Drawer.Screen name="Ambiente" component={Ambiente} options={{headerShown: false}} /> 
         </Drawer.Navigator> */}
       </NavigationContainer>
       );

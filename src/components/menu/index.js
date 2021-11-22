@@ -5,6 +5,7 @@ import { StyleSheet } from 'react-native';
 import Home from '../../view/home';
 import Reserva from '../../view/reserva';
 import Ambiente from '../../view/ambiente';
+import Login from '../../view/login'
 
 import Icon from 'react-native-vector-icons/FontAwesome';
 
@@ -40,6 +41,7 @@ export default function Menu() {
               component={Ambiente}
               options= {{drawerIcon: config => <Icon name="home" size={18} color="#ece1e1"/>}}
              />
+
         </Drawer.Navigator>
     )
 }
