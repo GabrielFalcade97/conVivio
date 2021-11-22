@@ -1,30 +1,39 @@
 import React from "react";
-import { View, Text } from "react-native";
+import { ScrollView,  
+         Image,
+         StyleSheet } from "react-native";
+import Line from '../../components/Line/Line'
+import LongText from "../../components/LongText/LongText";
+
 
 
 
 export default class AmbienteDetalhe extends React.Component{
     render(){
-    // const {ambiente} = this.props.navigation.state.params;
-        const ambiente = {
-                
-                "id": 1,
-                "title": "Salão de festa",
-                "descricao": "Espaço para realização de festas/eventos dos moradores do condomínio e visitantes",
-                "lotacao": 75,
-                "img": "https://www.hoteltaiyo.com.br/wp-content/uploads/2017/11/Salao_de_festa-768x512.jpg"
-        
-            
-        }
-
+        const {ambiente} = this.props.navigation.state.params;
         return(
             
-            <View>
-                <Text>{ ambiente.title }</Text>
-                <Text>Lotação máxima: {ambiente.lotacao} pessoas</Text>
-                <Text>Sobre o ambiente: {ambiente.descricao}</Text>
-            </View>
+            <ScrollView>
+                <Image
+                 source={{
+                     uri: ambiente.img
+                 }}
+                 style={styles.image}
+                 />
+
+                <Line label="Título" content={ambiente.title}/>
+                <Line label="Lotação" content={ambiente.lotacao}/>
+                <LongText label="Descrição" content={ambiente.descricao}/>
+            </ScrollView>
         )
     }
     }
 
+    const styles = StyleSheet.create({
+        image: {
+            aspectRatio: 1,
+
+        }
+    });
+
+    

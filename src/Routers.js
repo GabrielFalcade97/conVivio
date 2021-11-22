@@ -1,56 +1,34 @@
 import React from 'react';
 
-import Login from './view/login';
-import Menu from './components/menu';
-import Home from './view/home';
+import Login from './view/login/loginScreen';
+import Menu from './components/menu/menuScreen';
+import Home from './view/home/homeScreen';
+import Ambiente from './view/ambiente/ambienteScreen';
 
 import { NavigationContainer } from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import { createDrawerNavigator, DrawerContentScrollView } from '@react-navigation/drawer';
-import Ambiente from './view/ambiente';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { DrawerItem, DrawerItemList } from '@react-navigation/drawer';
-
-
-
-
-
-// Teste
-function CustomDrawerContent(props) {
-  return (
-    
-    <DrawerContentScrollView {...props}>
-      <DrawerItemList {...props} />
-      <DrawerItem label="Logout" onPress={() => alert('Link to help')} />
-    </DrawerContentScrollView>
-  );
-}
-
-// 
 
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
 
 
-
-const App: () => React$Node = () => {
+const App = () => {
   return (
       <NavigationContainer>
-         <Menu/> 
-        {/* <Drawer.Navigator drawerContent={props => <CustomDrawerContent {...props} />}>
-         
-          <Drawer.Screen name="Login" component={Login} options={ {headerShown: false} } />
-          <Drawer.Screen name="Menu" component={Menu} options={ {headerShown: false} } />
-          <Drawer.Screen name="Home" component={Home} options={ {headerShown: false} } />
-          <Drawer.Screen name="Ambiente" component={Ambiente} options={{headerShown: false}} /> 
-        </Drawer.Navigator> */}
+        <Stack.Navigator>
+        <Stack.Screen name="Ambiente" component={Ambiente} options={{headerShown: false}}/> 
+        {/* //troca por login aqui em cima ^^^^*/}
+          <Stack.Screen name="Login" component={Login} options={{headerShown: false}}/>
+          <Stack.Screen name="Menu" component={Menu} options={{headerShown: false}}/>
+          
+        </Stack.Navigator>
       </NavigationContainer>
       );
 };
-
-
-
 
 
 export default App;
