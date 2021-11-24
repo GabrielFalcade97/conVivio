@@ -1,5 +1,4 @@
-import firebase from "firebase";
-
+import firebase from "../services/firebaseConnection"
 export const SET_FIELD = 'SET_FIELD';
 
 export const setField = (field, value) => {
@@ -10,17 +9,25 @@ export const setField = (field, value) => {
   }
 }
 
-export const salveAmbiente = ambiente => {
+export const AMBIENTE_SAVED = 'AMBIENTE_SAVED';
+export const ambienteSaved = () =>{
+  return{
+    type: AMBIENTE_SAVED
+  }
+}
+
+export const saveAmbiente = ambiente => {
   const {currentUser} = firebase.auth();
   
-  firebase
+  return async dispatch => {
+   await firebase
     .database()
-    .reff(`users/${currentUser}/ambientes`)
-    .push(ambiente)
-    .then(() => {
-      console.log('Ambiente cadastrado. Analise o console do firebase')
-    })
+    .ref(`/users/${currentUser.uid}/ambientes`)
+    .push(ambiente);
 
-
-
+    dispatch(ambienteSaved());
+    
+  }
+  
 }
+

@@ -8,7 +8,7 @@ import FormRow from "../../components/FormRow/FormRow";
 import { connect } from "react-redux";
 import { setField, saveAmbiente } from "../../actions";
 
-const NovoAmbienteScreen = ({ambienteForm, setField, saveAmbiente}) => (
+const NovoAmbienteScreen = ({ambienteForm, setField, saveAmbiente, navigation}) => (
     <ScrollView style={styles.viewcontainer}>
 
        <FormRow>
@@ -51,8 +51,9 @@ const NovoAmbienteScreen = ({ambienteForm, setField, saveAmbiente}) => (
 
         <Button
             title="Salvar"
-            onPress={() =>{
-                saveAmbiente(ambienteForm);
+            onPress={async () =>{
+                await saveAmbiente(ambienteForm)
+                navigation.goBack();
             }}/>
 
     </ScrollView>
