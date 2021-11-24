@@ -8,9 +8,10 @@ import LongText from "../../components/LongText/LongText";
 
 
 
+
 export default class AmbienteDetalhe extends React.Component{
     render(){
-        const {ambiente} = this.props.navigation.state.params;
+         const {ambiente} = this.props.route.params;
         return(
             
             <ScrollView>

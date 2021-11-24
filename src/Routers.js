@@ -20,7 +20,7 @@ const App = () => {
   return (
       <NavigationContainer>
         <Stack.Navigator>
-        <Stack.Screen name="Ambiente" component={Ambiente} options={{headerShown: false}}/> 
+        {/* <Stack.Screen name="Ambiente" component={Ambiente} options={{headerShown: false}}/>  */}
         {/* //troca por login aqui em cima ^^^^*/}
           <Stack.Screen name="Login" component={Login} options={{headerShown: false}}/>
           <Stack.Screen name="Menu" component={Menu} options={{headerShown: false}}/>

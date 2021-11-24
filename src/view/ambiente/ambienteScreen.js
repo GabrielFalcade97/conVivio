@@ -4,9 +4,12 @@ import ambientes from '../../../ambientes.json'
 import AmbienteCard from '../../components/AmbienteCard/AmbienteCard';
 import { createStackNavigator } from '@react-navigation/stack';
 import AmbienteDetalhe from './ambienteDetalhe';
-
+import NovoAmbienteScreen from './NovoAmbienteScreen';
 
 import HeaderDrawNav from '../../components/headerDrawNav/headerDrawNav';
+import AddCard from '../../components/AddCard/AddCard';
+
+
 
 const isLeft = num => num % 2 === 0;
 
@@ -15,9 +18,14 @@ function Ambiente({navigation}){
         <View>
            <HeaderDrawNav title='Ambientes' navigation={navigation}/>
            <FlatList 
-                data={ambientes}
+                data={[...ambientes, {isLast: true}]}
                 renderItem={({item, index}) => {
                     return(
+                        item.isLast ? 
+                           <AddCard 
+                            onNavigate={() => navigation.navigate('NovoAmbienteScreen')}
+                           />
+                            :
                             <AmbienteCard 
                             ambiente={item}
                             isLeft={isLeft(index)}
@@ -26,7 +34,7 @@ function Ambiente({navigation}){
                     );
                 }}
 
-                keyExtractor={item => item.id.toString()}
+                keyExtractor={item => item.id}
                 numColumns={2}
            /> 
         </View>
@@ -46,16 +54,13 @@ export default function AmbienteRoutes({navigation}) {
             <AmbienteStack.Screen 
                 name='AmbienteDetalhe'
                 component={AmbienteDetalhe}
-                options={{headerShown: false}}
-                options={({navigation}) => {
-                    const { ambiente } = navigation.state.params;
-                    return {
-                      title: ambiente.title
-                    }
-                }
-            }
-                        
+                options={({ route }) => ({ title: route.params.ambiente.title, headerShown: true })}   
             />   
+            <AmbienteStack.Screen 
+                name='NovoAmbienteScreen'
+                component={NovoAmbienteScreen}
+                options={{headerShown: true, title: 'Novo Ambiente'}}        
+            />
         </AmbienteStack.Navigator>
     )
 }
