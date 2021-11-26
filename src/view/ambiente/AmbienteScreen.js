@@ -15,6 +15,7 @@ import AddCard from '../../components/AddCard/AddCard';
 const isLeft = num => num % 2 === 0;
 
 class Ambiente extends React.Component {
+    
     constructor(props) {
         super(props);
     }
@@ -26,7 +27,7 @@ class Ambiente extends React.Component {
     render(){
     return(
         <View>
-           <HeaderDrawNav title='Ambientes' navigation={navigation}/>
+           <HeaderDrawNav title='Ambientes' navigation={this.props.navigation}/>
            <FlatList 
                 data={[...this.props.ambientes, {isLast: true}]}
                 renderItem={({item, index}) => {
@@ -52,45 +53,18 @@ class Ambiente extends React.Component {
     }
 }
 
-const AmbienteStack = createStackNavigator();
-
-function AmbienteRoutes({navigation}) {
-    return(
-        <AmbienteStack.Navigator initialRouteName='Ambiente'>
-            <AmbienteStack.Screen 
-                name='Ambiente'
-                component={Ambiente}
-                options={{headerShown: false}}
-            />   
-            <AmbienteStack.Screen 
-                name='AmbienteDetalhe'
-                component={AmbienteDetalhe}
-                options={({ route }) => ({ title: route.params.ambiente.title, headerShown: true })}   
-            />   
-            <AmbienteStack.Screen 
-                name='NovoAmbienteScreen'
-                component={NovoAmbienteScreen}
-                options={{headerShown: true, title: 'Novo Ambiente'}}        
-            />
-        </AmbienteStack.Navigator>
-    )
-}
-
-
-
 const mapStateToProps = state => {
     const {listaAmbientes} = state;
 
     const keys = Object.keys(listaAmbientes);
-    const listaAmbientesComId = keys.map(keys => {
+    const listaAmbientesComId = keys.map(key => {
         return {...listaAmbientes[key], id: key}
     })
-    return {ambientes: listaAmbientesComId, ...state};
+    return {ambientes: listaAmbientesComId};
     
 }
 
-
-
-
-export default AmbienteRoutes
-connect(mapStateToProps, {watchAmbientes})(Ambiente);
+export default connect(
+    mapStateToProps, 
+    {watchAmbientes}
+    )(Ambiente)

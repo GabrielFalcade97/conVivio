@@ -4,17 +4,18 @@ import { ScrollView,
          StyleSheet } from "react-native";
 import Line from '../../components/Line/Line'
 import LongText from "../../components/LongText/LongText";
-
-
-
-
+import HeaderDrawNav from "../../components/headerDrawNav/headerDrawNav";
 
 export default class AmbienteDetalhe extends React.Component{
     render(){
          const {ambiente} = this.props.route.params;
+         
         return(
-            
+            <>
+            <HeaderDrawNav title={ambiente.title} navigation={this.props.navigation}/>
+        
             <ScrollView>
+
                 <Image
                  source={{
                      uri: ambiente.img
@@ -26,6 +27,7 @@ export default class AmbienteDetalhe extends React.Component{
                 <Line label="Lotação" content={ambiente.lotacao}/>
                 <LongText label="Descrição" content={ambiente.descricao}/>
             </ScrollView>
+            </>
         )
     }
     }
