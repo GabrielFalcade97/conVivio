@@ -2,63 +2,96 @@ import React from "react";
 import { StyleSheet, 
          ScrollView, 
          TextInput, 
-         Button } from "react-native";
+         Button,
+         ActivityIndicator,
+         Alert } from "react-native";
 
 import FormRow from "../../components/FormRow/FormRow";
 import { connect } from "react-redux";
 import { setField, saveAmbiente } from "../../actions";
 
-const NovoAmbienteScreen = ({ambienteForm, setField, saveAmbiente, navigation}) => (
-    <ScrollView style={styles.viewcontainer}>
+class NovoAmbienteScreen extends React.Component {
 
-       <FormRow>
-            <TextInput
-                style={styles.textinput}
-                placeholder="Título"
-                value={ambienteForm.title}
-                onChangeText={value => setField('title', value)}
-            />    
-        </FormRow>
+    constructor(props) {
+        super(props);
 
-        <FormRow>
-            <TextInput
-                style={styles.textinput}
-                placeholder="URL da imagem"
-                value={ambienteForm.img}
-                onChangeText={value => setField('img', value)}
-            />
-        </FormRow>
+        this.state = {
+            isLoading: false
+        }
+    }
 
-        <FormRow>
-            <TextInput
-                style={styles.textinput}
-                placeholder="Lotação"
-                value={ambienteForm.lotacao}
-                onChangeText={value => setField('lotacao', value)}
-            />
-        </FormRow>
 
-        <FormRow>
-            <TextInput
-                style={styles.textinput}
-                placeholder="Descrição"
-                value={ambienteForm.descricao}
-                onChangeText={value => setField('descricao', value)}
-                numberOfLines={5}
-                multiline={true}
-            />
-        </FormRow>
+    render(){
+        const {ambienteForm, setField, saveAmbiente, navigation} = this.props;
 
-        <Button
-            title="Salvar"
-            onPress={async () =>{
-                await saveAmbiente(ambienteForm)
-                navigation.goBack();
-            }}/>
+        return(
+            <ScrollView style={styles.viewcontainer}>
+                <FormRow>
+                    <TextInput
+                        style={styles.textinput}
+                        placeholder="Título"
+                        value={ambienteForm.title}
+                        onChangeText={value => setField('title', value)}
+                    />    
+                </FormRow>
 
-    </ScrollView>
+                <FormRow>
+                    <TextInput
+                        style={styles.textinput}
+                        placeholder="URL da imagem"
+                        value={ambienteForm.img}
+                        onChangeText={value => setField('img', value)}
+                    />
+                </FormRow>
 
-);
+                <FormRow>
+                    <TextInput
+                        style={styles.textinput}
+                        placeholder="Lotação"
+                        value={ambienteForm.lotacao}
+                        onChangeText={value => setField('lotacao', value)}
+                    />
+                </FormRow>
+
+                <FormRow>
+                    <TextInput
+                        style={styles.textinput}
+                        placeholder="Descrição"
+                        value={ambienteForm.descricao}
+                        onChangeText={value => setField('descricao', value)}
+                        numberOfLines={5}
+                        multiline={true}
+                    />
+                </FormRow>
+
+                {
+                    this.state.isLoading ?
+                        <ActivityIndicator />
+                        :
+                        <Button
+                            title="Salvar"
+                            onPress={async () =>{
+                                this.setState({ isLoading: true })
+
+                                try{
+                                    await saveAmbiente(ambienteForm);
+                                    navigation.goBack();
+                                }catch (error){
+                                    Alert.alert('Erro', error.message);
+                                } finally{
+                                    this.setState({ isLoading: false });
+                                }
+
+                                }}/>
+                }
+                
+            </ScrollView>
+        );
+    }
+
+
+
+}
 
 
 
@@ -69,7 +102,7 @@ const styles = StyleSheet.create({
         paddingBottom:5,
     },
     viewcontainer: {
-        paddingTop: 15, //ver essa view e tentar colocar header
+        paddingTop: 15, 
     }
 });
 

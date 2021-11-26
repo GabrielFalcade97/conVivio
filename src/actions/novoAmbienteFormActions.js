@@ -28,6 +28,5 @@ export const saveAmbiente = ambiente => {
     dispatch(ambienteSaved());
     
   }
-  
 }
 

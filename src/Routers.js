@@ -3,7 +3,7 @@ import React from 'react';
 import Login from './view/login/loginScreen';
 import Menu from './components/menu/menuScreen';
 import Home from './view/home/homeScreen';
-import Ambiente from './view/ambiente/ambienteScreen';
+// import Ambiente from './view/ambiente/AmbienteScreen'
 
 import { NavigationContainer } from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';

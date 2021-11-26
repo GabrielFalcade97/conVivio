@@ -4,7 +4,7 @@ import { StyleSheet } from 'react-native';
 
 import Home from '../../view/home/homeScreen';
 import Reserva from '../../view/reserva/reservaScreen';
-import Ambiente from '../../view/ambiente/ambienteScreen';
+import Ambiente from '../../view/ambiente/AmbienteScreen';
 import Login from '../../view/login/loginScreen';
 
 import Icon from 'react-native-vector-icons/FontAwesome';
