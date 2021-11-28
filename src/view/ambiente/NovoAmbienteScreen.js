@@ -4,28 +4,155 @@ import { StyleSheet,
          TextInput, 
          Button,
          ActivityIndicator,
-         Alert } from "react-native";
+         Alert,
+         View,
+         Image,
+         TouchableOpacity,
+         PermissionsAndroid } from "react-native";
 
 import FormRow from "../../components/FormRow/FormRow";
 import { connect } from "react-redux";
-import { setField, saveAmbiente } from "../../actions";
+import { setField, saveAmbiente, setAllFields, resetaForm } from "../../actions";
+import HeaderDrawNav from "../../components/headerDrawNav/headerDrawNav";
+import {RNCamera} from 'react-native-camera';
+import CameraRollPicker from '@react-native-community/cameraroll';
+import ImgToBase64 from 'react-native-image-base64';
+
 
 class NovoAmbienteScreen extends React.Component {
+
 
     constructor(props) {
         super(props);
 
         this.state = {
-            isLoading: false
+            isLoading: false,
+            isCamera: false,
+            isCameraRoll: false,
         }
     }
 
+    componentDidMount() {
+        // const {navigation, setAllFields, resetaForm} = this.props;
+        // console.log(navigation.state)
+        // const { params } = navigation.state;
 
-    render(){
+        // if(params && params.ambienteToEdit){
+        //     setAllFields(params.ambienteToEdit)
+        // } else {
+        //     resetaForm();
+        // }
+
+        //primeira versão
+
+        // if(this.props.navigation.state.params && this.props.navigation.state.params.ambienteToEdit){
+        //     this.props.setAllFields(this.props.navigation.state.params.ambienteToEdit)
+        // }
+    }
+
+    viewGaleria(){
+        this.requestExternalStorageAccess();
+
+        return(
+            <CameraRollPicker
+                maximum={1}
+                selectSingleItem={true}
+                callback={ (volta) =>{
+                    if(volta.length > 0){
+                        console.log(volta);
+                        ImgToBase64.getBase64String(volta[0].uri)
+                        .then(stringConvertida => {
+                            this.props.setField('img', stringConvertida)
+                        })
+                        .catch(err =>{
+                            console.log(err)
+                        })
+                    }
+
+                    this.setState({
+                        isCameraRoll: false,
+                    })
+                }}
+            />    
+                
+        );
+    }
+
+    async requestExternalStorageAccess(){
+        try{
+            const permissao = await PermissionsAndroid
+                .request(PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE);
+
+            if(permissao !== PermissionsAndroid.RESULTS.GRANTED){
+                Alert.alert('Permissão negada');
+            }   
+        }catch(err){
+            console.log(err);
+        }
+    }
+
+    viewCamera(){
+        return(
+            <View style={styles.container}>
+                <RNCamera 
+                    ref={ref => {
+                        this.camera = ref;
+                    }}
+                    style={styles.preview}
+                    type={RNCamera.Constants.Type.back}
+                    flashMode={RNCamera.Constants.FlashMode.on}
+                    androidCameraPermissionOptions={{
+                        title: 'Permissão para usar câmera',
+                        message: 'Precisamos de autorização para utilizar a câmera',
+                        buttonPositive: 'Aceito',
+                        buttonNegative: 'Cancelar'
+                    }}
+                    androidRecordAudioPermissionOptions={{
+                        title: 'Permissão para gravar',
+                        message: 'Precisamos de autorização para gravar áudio',
+                        buttonPositive: 'Aceito',
+                        buttonNegative: 'Cancelar'
+                    }}
+                />
+
+                <View>
+                    <TouchableOpacity
+                        style={styles.captura}
+                        onPress={this.capturarFoto.bind(this)}>
+
+                        <Text>Tirar foto</Text>
+
+                    </TouchableOpacity>
+                </View>
+
+            </View>
+        )
+    }
+
+    capturarFoto = async() => {
+        if(this.camera){
+            const options = {quality: 0.5, base64:true, forceUpOrientation:true, fixOrientation:true};
+            const data = await this.camera.capturarFotoAsync(options);
+
+            if(data){
+                this.props.setField('img', data.base64);
+
+                this.setState({
+                    isCamera: false
+                })
+            }
+        }
+    }
+
+    viewForm() {
         const {ambienteForm, setField, saveAmbiente, navigation} = this.props;
 
         return(
+            
             <ScrollView style={styles.viewcontainer}>
+
+            <HeaderDrawNav title='Informações' navigation={this.props.navigation}/>
+                
                 <FormRow>
                     <TextInput
                         style={styles.textinput}
@@ -36,12 +163,44 @@ class NovoAmbienteScreen extends React.Component {
                 </FormRow>
 
                 <FormRow>
-                    <TextInput
-                        style={styles.textinput}
-                        placeholder="URL da imagem"
-                        value={ambienteForm.img}
-                        onChangeText={value => setField('img', value)}
-                    />
+                    {
+                        ambienteForm.img ?
+                        <Image 
+                            source={{uri: `data:image/jpeg;base,${ambienteForm.img}`}}
+                            style={styles.img}
+                            />
+                        : null
+                    }
+
+                    <View style={{paddingTop: 5}}>
+                        <Button
+                            title='Capturar imagem'
+                            onPress={() => {
+                                Alert.alert(
+                                    'Captura de imagem',
+                                    'De onde quer a imagem?',
+                                    [
+                                        {
+                                            text:'Câmera',
+                                            onPress: () => {
+                                            this.setState({
+                                                isCamera:true
+                                            })
+                                            }
+                                        },
+                                        {
+                                            text:'Galeria',
+                                            onPress: () =>{
+                                                this.setState({
+                                                    isCameraRoll:true
+                                                })
+                                            }
+                                        }   
+                                    ]
+                                )
+                            }}
+                        />
+                    </View>
                 </FormRow>
 
                 <FormRow>
@@ -86,10 +245,23 @@ class NovoAmbienteScreen extends React.Component {
                 }
                 
             </ScrollView>
+            
         );
     }
+    
 
+    render(){
 
+        if(this.state.isCameraRoll){
+            return(this.viewGaleria())
+        }
+
+        if(this.state.isCamera){
+            return(this.viewCamera())
+        }
+
+        return(this.viewForm())
+    }
 
 }
 
@@ -103,8 +275,33 @@ const styles = StyleSheet.create({
     },
     viewcontainer: {
         paddingTop: 15, 
-    }
+    },
+    img: {
+        aspectRatio: 1,
+        width: '100$',
+    },
+    container: {
+        flex: 1,
+        flexDirection: "column",
+        backgroundColor: 'black'
+    },
+    preview: {
+        flex: 1,
+        justifyContent: 'flex-end',
+        alignItens: 'center',
+    },
+    captura: {
+        flex: 0,
+        backgroundColor: '#fff',
+        borderRadius: 5,
+        padding: 15,
+        paddingHorizontal: 20,
+        alignSelf: 'center',
+        margin: 20,
+    },
 });
+
+
 
 const mapStateToProps = (state) => {
     return({
@@ -115,7 +312,9 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = {
     setField,
-    saveAmbiente
+    saveAmbiente,
+    setAllFields,
+    resetaForm
 }
 
 

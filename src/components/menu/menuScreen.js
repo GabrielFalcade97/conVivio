@@ -54,8 +54,7 @@ export default function Menu() {
 
             <Drawer.Screen
                 name='NovoAmbienteScreen'
-                component={NovoAmbienteScreen}
-                options={{headerShown: true, title: 'Novo Ambiente'}}   
+                component={NovoAmbienteScreen}  
             />
 
         </Drawer.Navigator>

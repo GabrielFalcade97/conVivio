@@ -20,7 +20,7 @@ const AmbienteCard = ({ambiente, isLeft, onNavigate}) => {
             <Image
                 source={
                     {
-                        uri: ambiente.img
+                        uri: `data:image/jpeg;base64,${ambiente.img}`
                     }
                 }
                 aspectRatio={1}

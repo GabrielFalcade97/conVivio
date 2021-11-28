@@ -16,17 +16,37 @@ export const ambienteSaved = () =>{
   }
 }
 
+export const SET_ALL_FIELDS = 'SET_ALL_AMBIENTES';
+export const setAllFields = ambiente => ({
+  type: SET_ALL_FIELDS,
+  ambiente: ambiente
+});
+
+export const RESETA_FORM = 'RESETA_FORM';
+export const resetaForm = () => ({
+  type: RESETA_FORM
+})
+
 export const saveAmbiente = ambiente => {
   const {currentUser} = firebase.auth();
   
   return async dispatch => {
-   await firebase
+    if(ambiente.id){
+
+      await firebase
+    .database()
+    .ref(`/users/${currentUser.uid}/ambientes/${ambiente.id}`)
+    .set(ambiente);
+
+    }else {
+
+      await firebase
     .database()
     .ref(`/users/${currentUser.uid}/ambientes`)
     .push(ambiente);
 
     dispatch(ambienteSaved());
-    
+    }
   }
 }
 

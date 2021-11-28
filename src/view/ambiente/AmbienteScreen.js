@@ -1,9 +1,6 @@
 import * as React from 'react';
-import {View, FlatList, StyleSheet} from 'react-native';
+import {View, FlatList, StyleSheet, ActivityIndicator} from 'react-native';
 import AmbienteCard from '../../components/AmbienteCard/AmbienteCard';
-import { createStackNavigator } from '@react-navigation/stack';
-import AmbienteDetalhe from './ambienteDetalhe';
-import NovoAmbienteScreen from './NovoAmbienteScreen';
 import { connect } from 'react-redux';
 import { watchAmbientes } from '../../actions/ambientesActions';
 
@@ -25,6 +22,11 @@ class Ambiente extends React.Component {
     }
 
     render(){
+
+    if(this.props.ambientes === null){
+        return <ActivityIndicator/>
+    }
+
     return(
         <View>
            <HeaderDrawNav title='Ambientes' navigation={this.props.navigation}/>
@@ -55,6 +57,10 @@ class Ambiente extends React.Component {
 
 const mapStateToProps = state => {
     const {listaAmbientes} = state;
+
+    if(listaAmbientes === null){
+        return {ambientes: listaAmbientes};
+    }
 
     const keys = Object.keys(listaAmbientes);
     const listaAmbientesComId = keys.map(key => {
