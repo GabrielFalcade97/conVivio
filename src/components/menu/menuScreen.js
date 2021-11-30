@@ -2,7 +2,6 @@ import * as React from 'react';
 import { createDrawerNavigator, DrawerContentScrollView, DrawerItemList, DrawerItem } from '@react-navigation/drawer';
 import { StyleSheet } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
-
 import Home from '../../view/home/homeScreen';
 import Reserva from '../../view/reserva/reservaScreen';
 import Ambiente from '../../view/ambiente/AmbienteScreen';

@@ -1,9 +1,10 @@
 import React from 'react';
 import FormRow from '../../components/FormRow/FormRow';
 import HeaderDrawNav from '../../components/headerDrawNav/headerDrawNav';
-import { ScrollView, Button, TextInput, ActivityIndicator, Alert, Piker} from 'react-native';
+import { ScrollView, Button, TextInput, ActivityIndicator, Alert, Piker, } from 'react-native';
 import { connect } from 'react-redux';
-import { setField, saveReserva, setAllFieldsRes } from '../../actions/novaReservaFormActions';
+import { setFieldRes, saveReserva, setAllFieldsRes } from '../../actions/novaReservaFormActions';
+import {StyleSheet} from 'react-native'
 
 class novaReservaScreen extends React.Component {
     constructor(props){
@@ -15,6 +16,9 @@ class novaReservaScreen extends React.Component {
     }
 
     render(){
+
+        const{reservaForm, setFieldRes, saveReserva, navigation} = this.props
+
         return(
             <ScrollView>
                 
@@ -25,7 +29,7 @@ class novaReservaScreen extends React.Component {
                         style={styles.textinput}
                         placeholder="Data do evento ex: 00/00/0000"
                         value={reservaForm.data}
-                        onChangeText={value => setField('title', value)}
+                        onChangeText={value => setFieldRes('data', value)}
                     />    
                 </FormRow>
 
@@ -40,7 +44,7 @@ class novaReservaScreen extends React.Component {
                         style={styles.textinput}
                         placeholder="Nome morador"
                         value={reservaForm.morador}
-                        onChangeText={value => setField('title', value)}
+                        onChangeText={value => setFieldRes('morador', value)}
                     />    
                 </FormRow>
 
@@ -86,7 +90,7 @@ const mapStateToProps = (state) => {
 }
 
 const mapDispatchToProps = {
-    setField,
+    setFieldRes,
     saveReserva,
     setAllFieldsRes,
 }

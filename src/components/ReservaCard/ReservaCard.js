@@ -1,8 +1,7 @@
 import React from "react";
 import {View, 
         Text,
-        StyleSheet, 
-        Image, 
+        StyleSheet,  
         Dimensions, 
         TouchableOpacity
     } from 'react-native';
@@ -18,7 +17,7 @@ const ReservaCard = ({reserva, isLeft, onNavigate}) => {
             <View style={styles.card}>
                 
                 <View style={styles.cardTitleContainer}>
-                    <Text style={styles.cardTitle}>Reserva</Text>
+                    <Text style={styles.cardTitle}>{reserva.data}</Text>
                 </View>
 
             </View>

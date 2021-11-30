@@ -1,9 +1,9 @@
 import firebase from '../services/firebaseConnection';
-export const SET_FIELD = 'SET_FIELD';
+export const SET_FIELD_RES = 'SET_FIELD_RES';
 
-export const setField = (field, value) => {
+export const setFieldRes = (field, value) => {
     return {
-        type: SET_FIELD,
+        type: SET_FIELD_RES,
         field,
         value
     }
@@ -17,10 +17,10 @@ export const reservaSaved = () =>{
 }
 
 export const SET_ALL_FIELDS_RES = 'SET_ALL_RESERVAS';
-export const setAllFieldsRes = reservas => ({
+export const setAllFieldsRes = reserva => ({
     type: SET_ALL_FIELDS_RES,
     reserva: reserva
-})
+});
 
 export const saveReserva = reserva => {
     const {currentUser} = firebase.auth();

@@ -18,7 +18,7 @@ export const watchReservas = () => {
             .on('value', snapshot => {
                 const reservas = snapshot.val();
                 const action = setReservas(reservas);
-                dipatch(action);
+                dispatch(action);
             })
     }
 }

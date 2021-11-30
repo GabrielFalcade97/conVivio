@@ -3,6 +3,7 @@ import {View, Text, Button, ScrollView, ActivityIndicator} from 'react-native';
 import HeaderDrawNav from '../../components/headerDrawNav/headerDrawNav';
 import AddCard from '../../components/AddCard/AddCard';
 import ReservaCard from '../../components/ReservaCard/ReservaCard'
+import {watchReservas} from '../../actions/reservasActions'
 import { connect } from 'react-redux';
 
 const isLeft = num => num % 2 === 0;
@@ -24,7 +25,7 @@ class Reserva extends React.Component {
         }
 
         return(
-            <ScrollView>
+            <View>
 
                 <HeaderDrawNav title='Reservas' navigation={this.props.navigation}/>
 
@@ -49,7 +50,7 @@ class Reserva extends React.Component {
                 numColumns={2}
            /> 
 
-            </ScrollView>
+            </View>
         )
     }
 }
@@ -66,7 +67,7 @@ const mapStateToProps = state => {
         return {...listaReservas[key], id: key}
     })
     return {reservas: listaReservasComId};
-}
+ }
 
 export default connect(
     mapStateToProps,
