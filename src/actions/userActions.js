@@ -51,3 +51,33 @@ export const acessoLogin = ({email, password}) => dispatch =>{
         return Promise.reject(error);
     })
 }
+
+
+//Novo
+export const USER_SAVED = 'USER_SAVED';
+export const userSaved = () => {
+  return {
+    type: USER_SAVED
+  }
+}
+
+export const saveUser = user => {
+  const { currentUser } = firebase.auth();
+
+  return async dispatch => {
+    if(user.id) {
+
+      await firebase
+      .database()
+      .ref(`/users/${currentUser.uid}/users/${users.id}`)
+      .set(users);
+    }else{
+      await firebase
+        .database()
+        .ref(`/users/${currentUser.uid}/users`)
+        .push(users);
+    }
+
+    dispatch(userSaved());
+  }
+}

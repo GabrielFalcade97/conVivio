@@ -40,6 +40,8 @@ export default class novoUsuario extends React.Component{
                     <TextInput
                         style={styles.textInput}
                         placeholder="Email"
+                        keyboardType="email-address"
+                        autoCapitalize='none'
                     />
                 </FormRow>
 
@@ -47,6 +49,7 @@ export default class novoUsuario extends React.Component{
                     <TextInput
                         style={styles.textInput}
                         placeholder="Senha"
+                        secureTextEntry
                     />
                 </FormRow>
 
@@ -54,6 +57,7 @@ export default class novoUsuario extends React.Component{
                     <TextInput
                         style={styles.textInput}
                         placeholder="confirmar Senha"
+                        secureTextEntry
                     />
                 </FormRow>
 

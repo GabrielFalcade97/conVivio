@@ -7,32 +7,25 @@ import {View,
         TouchableOpacity
     } from 'react-native';
 
-
-const AmbienteCard = ({ambiente, isLeft, onNavigate}) => {
+const ReservaCard = ({reserva, isLeft, onNavigate}) => {
     return (
-    <TouchableOpacity 
-    onPress={onNavigate}
-    style={[
-        styles.container, 
-        isLeft ? styles.leftColumn : styles.rightColumn
-        ]}>
-        <View style={styles.card}>
-            <Image
-                source={
-                    {
-                        uri: `data:image/jpeg;base64,${ambiente.img}`
-                    }
-                }
-                aspectRatio={1}
-                resizeMode="contain"
-            />
-            <View style={styles.cardTitleContainer}>
-                <Text style={styles.cardTitle}>{ ambiente.title }</Text>
+        <TouchableOpacity 
+        onPress={onNavigate}
+        style={[
+            styles.container, 
+            isLeft ? styles.leftColumn : styles.rightColumn
+            ]}>
+            <View style={styles.card}>
+                
+                <View style={styles.cardTitleContainer}>
+                    <Text style={styles.cardTitle}>Reserva</Text>
+                </View>
+
             </View>
-        </View>
-    </TouchableOpacity>
-    );
-};
+        </TouchableOpacity>
+    );   
+}
+
 
 const styles = StyleSheet.create({
     container: {
@@ -72,4 +65,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default AmbienteCard;
+export default ReservaCard;

@@ -32,25 +32,25 @@ class NovoAmbienteScreen extends React.Component {
         }
     }
 
-    componentDidMount() {
-        // const {navigation, setAllFields, resetaForm} = this.props;
-        // console.log(navigation.state)
-        // const { params } = navigation.state;
+    // componentDidMount() {
+    //     // const {navigation, setAllFields, resetaForm} = this.props;
+    //     // console.log(navigation.state)
+    //     // const { params } = navigation.state;
 
-        // if(params && params.ambienteToEdit){
-        //     setAllFields(params.ambienteToEdit)
-        // } else {
-        //     resetaForm();
-        // }
+    //     // if(params && params.ambienteToEdit){
+    //     //     setAllFields(params.ambienteToEdit)
+    //     // } else {
+    //     //     resetaForm();
+    //     // }
 
-        //primeira versão
+    //     //primeira versão
 
-        // if(this.props.navigation.state.params && this.props.navigation.state.params.ambienteToEdit){
-        //     this.props.setAllFields(this.props.navigation.state.params.ambienteToEdit)
-        // }
-    }
+    //     // if(this.props.navigation.state.params && this.props.navigation.state.params.ambienteToEdit){
+    //     //     this.props.setAllFields(this.props.navigation.state.params.ambienteToEdit)
+    //     // }
+    // }
 
-    viewGaleria(){
+    viewGaleria(){ //acessa galeria 
         this.requestExternalStorageAccess();
 
         return(
@@ -78,7 +78,7 @@ class NovoAmbienteScreen extends React.Component {
         );
     }
 
-    async requestExternalStorageAccess(){
+    async requestExternalStorageAccess(){ //permissões de acesso
         try{
             const permissao = await PermissionsAndroid
                 .request(PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE);

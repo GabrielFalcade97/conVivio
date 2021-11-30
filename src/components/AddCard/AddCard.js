@@ -1,6 +1,5 @@
 import React from "react";
 import {View, 
-        Text,
         StyleSheet, 
         Image, 
         Dimensions, 
@@ -27,16 +26,13 @@ const AddCard = ({isLeft, onNavigate}) => {
                 aspectRatio={1}
                 resizeMode="contain"
             />
-            {/* <View style={styles.cardTitleContainer}>
-                <Text style={styles.cardTitle}>botão add</Text>
-            </View> */}
+            
         </View>
     </TouchableOpacity>);
 };
 
 const styles = StyleSheet.create({
     container: {
-        // flex: .5,
         width: '50%',
         padding: 5,
         height: Dimensions.get('window').width / 2,
@@ -44,7 +40,6 @@ const styles = StyleSheet.create({
     card: {
         flex: 1,
         borderWidth: 1,
-        // margin: 10,
 
     },
     cardTitleContainer:{
