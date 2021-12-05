@@ -8,9 +8,8 @@ import { View,
 import { TextInput } from 'react-native-gesture-handler';
 import FormRow from '../../components/FormRow/FormRow';
 import {connect} from 'react-redux';
+import { acessoLogin} from '../../actions';
 
-
-import { acessoLogin } from '../../actions';
 
 
 class Login extends React.Component {
@@ -74,9 +73,12 @@ class Login extends React.Component {
         if(this.state.isLoading)
             return <ActivityIndicator />    
         return(
-            <Button 
-                title="ENTRAR" 
-                onPress={() => this.acessoLogin()} />
+            <View style={styles.buttonEntrar}>
+                <Button 
+                    color='#BD89EB'
+                    title="ENTRAR" 
+                    onPress={() => this.acessoLogin()} />
+            </View>
         )
     }
 
@@ -96,8 +98,8 @@ class Login extends React.Component {
 
     render() {
         return (
-            <View>
-                <Text>ConVivio</Text>
+            <View style={styles.viewLog}>
+                <Text style={styles.textPrinc}>ConVívio</Text>
                 <FormRow>
                     <TextInput
                         style={styles.textInput}
@@ -125,8 +127,12 @@ class Login extends React.Component {
                 {this.renderButton()}
                 {this.renderMessage()}
 
-                <Text>-------------------------------------------------------</Text>
-                <Button title="CRIAR CONTA" />
+                <View style={styles.button}>
+                    <Button 
+                    title="CRIAR CONTA"
+                    color='#BD89EB'
+                    onPress={() => this.props.navigation.navigate('novoUsuario')} />
+                </View>
 
             </View>
 
@@ -137,12 +143,62 @@ class Login extends React.Component {
 const styles = StyleSheet.create({
     textInput: {
         fontFamily: 'Roboto',
-        color: 'black',
+        color: '#000000',
         borderWidth: 1,
         borderColor: 'gray',
-        paddingLeft: 10,
-        paddingRight: 10,
-    }
+        padding: 10,
+        height: 40,
+        margin: 0,
+        alignItems: 'center',
+        borderRadius: 5,
+        
+        
+    },
+
+    textPrinc: {
+        fontFamily: 'Roboto',
+        color: '#ece1e1',
+        fontSize: 65,
+        textAlign: 'center',
+        paddingTop: 45,
+        paddingBottom: 25
+        
+    },
+    
+    viewLog: {
+        backgroundColor: '#B15CFC',
+    },
+
+    button: {
+        padding: 20,
+        height: '100%',
+        paddinngTop: 10,
+        paddingBottom: 10,
+        paddingLeft: 5.5,
+        paddingRight: 5.5,
+        alignItems: 'center',
+        borderRadius: 8,
+        paddingTop: 45,
+        alignItems: 'center',
+        
+    },
+
+    buttonEntrar: {
+        padding: 10,
+        paddinngTop: 10,
+        paddingBottom: 10,
+        paddingLeft: 5.5,
+        paddingRight: 5.5,
+        alignItems: 'center',
+        borderRadius: 8,
+        paddingTop: 45,
+        
+        
+    },
+
+    
+    
+
 })
 
 export default connect(null, {acessoLogin})(Login);

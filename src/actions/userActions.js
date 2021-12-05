@@ -1,16 +1,14 @@
 import firebase from '../services/firebaseConnection';
 import { Alert } from 'react-native';
 
+
+
 export const USER_LOGIN_SUCCESS = 'USER_LOGIN';
 const userLogin_Success = user => ({
     type: USER_LOGIN_SUCCESS,
     user
 });
 
-const USER_LOGOUT = 'USER_LOGOUT'
-const userLogout = () => ({
-    type: USER_LOGOUT,
-});
 
 export const acessoLogin = ({email, password}) => dispatch =>{
 
@@ -18,9 +16,23 @@ export const acessoLogin = ({email, password}) => dispatch =>{
     .auth()
     .signInWithEmailAndPassword(email, password)
     .then(user => {
-        const action = userLogin_Success(user)
-        dispatch(action);
-        return user;
+        let uid = user.user.uid;
+        return firebase
+          .database()
+          .ref('users')
+          .child(uid)
+          .once('value')
+          .then((snapshot) => {
+            let user = {
+              uid,
+              nome_completo: snapshot.val().nome_completo,
+              email: snapshot.val().email,
+              apartamento: snapshot.val().apartamento
+            };
+            const action = userLogin_Success(user)
+            dispatch(action);
+            return user;
+          });
     })
     .catch(error => {
         alert (error)
@@ -54,30 +66,109 @@ export const acessoLogin = ({email, password}) => dispatch =>{
 
 
 //Novo
-export const USER_SAVED = 'USER_SAVED';
-export const userSaved = () => {
-  return {
-    type: USER_SAVED
-  }
-}
-
-export const saveUser = user => {
-  const { currentUser } = firebase.auth();
-
-  return async dispatch => {
-    if(user.id) {
-
-      await firebase
-      .database()
-      .ref(`/users/${currentUser.uid}/users/${users.id}`)
-      .set(users);
+export const signUp = (email = '', password = '', nome_completo = '', apartamento = '') => dispatch => {
+  return new Promise((resolve, reject) => {
+    if(email === '' || password === ''){
+      Alert.alert(
+        'Campos obrigatórios',
+        'Informe os dados para realizar o cadastro'
+      );
     }else{
-      await firebase
-        .database()
-        .ref(`/users/${currentUser.uid}/users`)
-        .push(users);
+      firebase
+        .auth()
+        .createUserWithEmailAndPassword(email, password)
+        .then( (value) => {
+          let uid = value.user.uid;
+          console.log("uid", uid)
+          firebase
+            .database()
+            .ref('users')
+            .child(uid)
+            .set({nome_completo, apartamento, email: value.user.email})
+            .then(() => {
+              let user = {
+                uid,
+                nome_completo,
+                apartamento,
+                email: value.user.email,
+              };
+              const action = userLogin_Success(user)
+              dispatch(action);
+              resolve(user);
+            });
+        })
+        .catch((error) => {
+          Alert.alert('Falha ao realizar cadastro');
+          reject(error)
+        });
     }
+  })
+  
+}
 
-    dispatch(userSaved());
+export const signIn = async (email = '', password = '') => {
+  if(email === '' || password === '') {
+    Alert.alert(
+      'Campos obrigatórios',
+      'Informe os dados para realizar login'
+    );
+  }else{
+    await firebase
+      .auth()
+      .signInWithEmailAndPassword(email, password)
+      .then(async (value) => {
+        let uid = value.user.uid;
+        await firebase
+          .database()
+          .ref('users')
+          .child(uid)
+          .once('value')
+          .then((snapshot) => {
+            let data = {
+              uid,
+              nome_completo: snapshot.val().nome_completo,
+              email: value.user.email,
+              apartamento: snapshot.val().apartamento
+            };
+            storageUser({data});
+          });
+      })
+      .catch((error) => {
+        Alert.alert('Falha ao realizar login')
+      })
   }
 }
+
+// firebase.auth().onAuthStateChanged(function(user){
+//   if(user){
+//     //user is signed in.
+//     var nome_completo = user.nome_completo;
+//     var email = user.email;
+//     var apartamento = user.apartamento;
+//     var uid = user.uid;
+//     var providerData = user.providerData;
+//   }else{
+//     //user is signed out
+//   }
+// });
+
+// firebase.auth().signOut().then(function() {
+//   console.log('Deslogado');
+// }).catch(function(error){
+//   console.log(error);
+// })
+
+// var user = firebase.auth().currentUser;
+
+// if(user) {
+//   //user is signed in
+//   if(user != null){
+//     nome_completo = user.nome_completo;
+//     email = user.email;
+//     apartamento = user.apartamento
+//     uid = user.uid;
+
+//   }else {
+//     //no user is signed in
+//   }
+// }

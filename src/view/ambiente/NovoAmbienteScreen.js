@@ -8,14 +8,15 @@ import { StyleSheet,
          View,
          Image,
          TouchableOpacity,
-         PermissionsAndroid } from "react-native";
+         PermissionsAndroid,
+         Text } from "react-native";
 
 import FormRow from "../../components/FormRow/FormRow";
 import { connect } from "react-redux";
 import { setField, saveAmbiente, setAllFields, resetaForm } from "../../actions";
 import HeaderDrawNav from "../../components/headerDrawNav/headerDrawNav";
 import {RNCamera} from 'react-native-camera';
-import CameraRollPicker from '@react-native-community/cameraroll';
+import CameraRollPicker from 'react-native-camera-roll-picker';
 import ImgToBase64 from 'react-native-image-base64';
 
 
@@ -32,23 +33,19 @@ class NovoAmbienteScreen extends React.Component {
         }
     }
 
-    // componentDidMount() {
-    //     // const {navigation, setAllFields, resetaForm} = this.props;
-    //     // console.log(navigation.state)
-    //     // const { params } = navigation.state;
+    componentDidMount() {
+        const {navigation, setAllFields, resetaForm} = this.props;
+        console.log(navigation.state)
+        // const { params } = navigation.state;
 
-    //     // if(params && params.ambienteToEdit){
-    //     //     setAllFields(params.ambienteToEdit)
-    //     // } else {
-    //     //     resetaForm();
-    //     // }
+        if(navigation.state?.params && state.params.ambienteToEdit){
+            setAllFields(params.ambienteToEdit)
+        } else {
+            resetaForm();
+        }
 
-    //     //primeira versão
-
-    //     // if(this.props.navigation.state.params && this.props.navigation.state.params.ambienteToEdit){
-    //     //     this.props.setAllFields(this.props.navigation.state.params.ambienteToEdit)
-    //     // }
-    // }
+    
+    }
 
     viewGaleria(){ //acessa galeria 
         this.requestExternalStorageAccess();
@@ -58,10 +55,12 @@ class NovoAmbienteScreen extends React.Component {
                 maximum={1}
                 selectSingleItem={true}
                 callback={ (volta) =>{
+                    
                     if(volta.length > 0){
                         console.log(volta);
                         ImgToBase64.getBase64String(volta[0].uri)
                         .then(stringConvertida => {
+                            console.log("cheguei aqui")
                             this.props.setField('img', stringConvertida)
                         })
                         .catch(err =>{
@@ -132,7 +131,7 @@ class NovoAmbienteScreen extends React.Component {
     capturarFoto = async() => {
         if(this.camera){
             const options = {quality: 0.5, base64:true, forceUpOrientation:true, fixOrientation:true};
-            const data = await this.camera.capturarFotoAsync(options);
+            const data = await this.camera.takePictureAsync(options);
 
             if(data){
                 this.props.setField('img', data.base64);
@@ -146,7 +145,7 @@ class NovoAmbienteScreen extends React.Component {
 
     viewForm() {
         const {ambienteForm, setField, saveAmbiente, navigation} = this.props;
-
+        // console.log("cheguei", ambienteForm.img)
         return(
             
             <ScrollView style={styles.viewcontainer}>
@@ -166,7 +165,7 @@ class NovoAmbienteScreen extends React.Component {
                     {
                         ambienteForm.img ?
                         <Image 
-                            source={{uri: `data:image/jpeg;base,${ambienteForm.img}`}}
+                            source={{uri: `data:image/jpeg;base64,${ambienteForm.img}`}}
                             style={styles.img}
                             />
                         : null
@@ -278,7 +277,7 @@ const styles = StyleSheet.create({
     },
     img: {
         aspectRatio: 1,
-        width: '100$',
+        width: '100%',
     },
     container: {
         flex: 1,

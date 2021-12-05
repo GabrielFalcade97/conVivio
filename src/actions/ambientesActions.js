@@ -16,7 +16,11 @@ export const watchAmbientes = () => {
             .database()
             .ref(`/users/${currentUser.uid}/ambientes`)
             .on('value', snapshot => {
-                const ambientes = snapshot.val();
+                const ambientes = [];
+                snapshot.forEach(function(ambiente){
+                    ambientes.push(ambiente)
+                    console.log(ambiente)
+                });
                 const action = setAmbientes(ambientes);
                 dispatch(action);
             })

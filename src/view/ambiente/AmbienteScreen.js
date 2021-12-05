@@ -30,7 +30,7 @@ class Ambiente extends React.Component {
     return(
         <View>
            <HeaderDrawNav title='Ambientes' navigation={this.props.navigation}/>
-           <FlatList 
+           <FlatList style={styles.flatlist}
                 data={[...this.props.ambientes, {isLast: true}]}
                 renderItem={({item, index}) => {
                     return(
@@ -74,3 +74,10 @@ export default connect(
     mapStateToProps, 
     {watchAmbientes}
     )(Ambiente)
+
+const styles = StyleSheet.create({
+       flatlist: {
+           backgroundColor: '#B15CFC',
+           height: '100%',  
+       } 
+})    

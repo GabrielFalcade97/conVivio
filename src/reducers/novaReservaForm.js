@@ -11,7 +11,7 @@ export default function(state = INITIAL_STATE_RES, action){
     switch(action.type) {
         case SET_FIELD_RES:
             const clonedState = {...state};
-            clondedState[action.field]= action.value;
+            clonedState[action.field]= action.value;
             return clonedState;
         case RESERVA_SAVED:
             return INITIAL_STATE_RES;

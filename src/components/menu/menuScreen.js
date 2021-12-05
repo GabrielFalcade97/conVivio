@@ -9,7 +9,9 @@ import AmbienteDetalhe from '../../view/ambiente/ambienteDetalhe';
 import NovoAmbienteScreen from '../../view/ambiente/NovoAmbienteScreen';
 import novaReservaScreen from '../../view/reserva/novaReserva';
 import reservaDetalhe from '../../view/reserva/reservaDetalhe';
+import novoUsuario from '../../view/login/novoUsuario';
 import Icon from 'react-native-vector-icons/FontAwesome';
+
 
 
 
@@ -21,7 +23,7 @@ const Drawer = createDrawerNavigator();
 export default function Menu() {
     return (
         <Drawer.Navigator
-            initialRouteName="Home" 
+            initialRouteName="Home"
             drawerStyle={styles.drawerStyle}
             screenOptions={{ labelStyle: { color: "#ece1e1", fontSize: 18 } }}
             drawerContent={props => <CustomDrawerContent {...props} />}
@@ -64,6 +66,8 @@ export default function Menu() {
                 name='NovoAmbienteScreen'
                 component={NovoAmbienteScreen}
             />
+
+            
 
 
 
