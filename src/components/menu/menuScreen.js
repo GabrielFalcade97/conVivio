@@ -1,5 +1,7 @@
 import * as React from 'react';
-import { createDrawerNavigator, DrawerContentScrollView, DrawerItemList, DrawerItem } from '@react-navigation/drawer';
+import { createDrawerNavigator, 
+         DrawerContentScrollView, 
+         DrawerItem } from '@react-navigation/drawer';
 import { StyleSheet } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import Home from '../../view/home/homeScreen';
@@ -9,7 +11,6 @@ import AmbienteDetalhe from '../../view/ambiente/ambienteDetalhe';
 import NovoAmbienteScreen from '../../view/ambiente/NovoAmbienteScreen';
 import novaReservaScreen from '../../view/reserva/novaReserva';
 import reservaDetalhe from '../../view/reserva/reservaDetalhe';
-import novoUsuario from '../../view/login/novoUsuario';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 
@@ -27,7 +28,6 @@ export default function Menu() {
             drawerStyle={styles.drawerStyle}
             screenOptions={{ labelStyle: { color: "#ece1e1", fontSize: 18 } }}
             drawerContent={props => <CustomDrawerContent {...props} />}
-
         >
 
             <Drawer.Screen
@@ -66,10 +66,6 @@ export default function Menu() {
                 name='NovoAmbienteScreen'
                 component={NovoAmbienteScreen}
             />
-
-            
-
-
 
         </Drawer.Navigator>
     )

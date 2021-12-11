@@ -9,18 +9,12 @@ const setAmbientes = ambientes => ({
 })
 
 export const watchAmbientes = () => {
-    const { currentUser } = firebase.auth();
-
     return dispatch => {
         firebase
             .database()
-            .ref(`/users/${currentUser.uid}/ambientes`)
+            .ref(`/ambientes`)
             .on('value', snapshot => {
-                const ambientes = [];
-                snapshot.forEach(function(ambiente){
-                    ambientes.push(ambiente)
-                    console.log(ambiente)
-                });
+                const ambientes = snapshot.val();
                 const action = setAmbientes(ambientes);
                 dispatch(action);
             })
@@ -44,14 +38,14 @@ export const deleteAmbiente = ambiente => {
                     onPress: async () => {
                         const { currentUser } = firebase.auth();
 
-                        try{
+                        try {
                             await firebase
                                 .database()
                                 .ref(`/users/${currentUser.uid}/ambientes/${ambiente.id}`)
                                 .remove();
 
                             resolve(true);
-                        } catch(e){
+                        } catch (e) {
                             reject(e);
                         }
                     }

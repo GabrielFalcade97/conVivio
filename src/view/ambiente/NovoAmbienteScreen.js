@@ -1,21 +1,22 @@
 import React from "react";
-import { StyleSheet, 
-         ScrollView, 
-         TextInput, 
-         Button,
-         ActivityIndicator,
-         Alert,
-         View,
-         Image,
-         TouchableOpacity,
-         PermissionsAndroid,
-         Text } from "react-native";
+import {
+        StyleSheet,
+        ScrollView,
+        TextInput,
+        Button,
+        ActivityIndicator,
+        Alert,
+        View,
+        Image,
+        TouchableOpacity,
+        PermissionsAndroid,
+        Text} from "react-native";
 
 import FormRow from "../../components/FormRow/FormRow";
 import { connect } from "react-redux";
 import { setField, saveAmbiente, setAllFields, resetaForm } from "../../actions";
 import HeaderDrawNav from "../../components/headerDrawNav/headerDrawNav";
-import {RNCamera} from 'react-native-camera';
+import { RNCamera } from 'react-native-camera';
 import CameraRollPicker from 'react-native-camera-roll-picker';
 import ImgToBase64 from 'react-native-image-base64';
 
@@ -34,66 +35,63 @@ class NovoAmbienteScreen extends React.Component {
     }
 
     componentDidMount() {
-        const {navigation, setAllFields, resetaForm} = this.props;
-        console.log(navigation.state)
-        // const { params } = navigation.state;
+        const { route, setAllFields, resetaForm } = this.props;
+        const { params } = route;
 
-        if(navigation.state?.params && state.params.ambienteToEdit){
+        if (params && params.ambienteToEdit) {
             setAllFields(params.ambienteToEdit)
         } else {
             resetaForm();
         }
 
-    
+
     }
 
-    viewGaleria(){ //acessa galeria 
+    viewGaleria() { //acessa galeria 
         this.requestExternalStorageAccess();
 
-        return(
+        return (
             <CameraRollPicker
                 maximum={1}
                 selectSingleItem={true}
-                callback={ (volta) =>{
-                    
-                    if(volta.length > 0){
-                        console.log(volta);
+                callback={(volta) => {
+
+                    if (volta.length > 0) {
                         ImgToBase64.getBase64String(volta[0].uri)
-                        .then(stringConvertida => {
-                            console.log("cheguei aqui")
-                            this.props.setField('img', stringConvertida)
-                        })
-                        .catch(err =>{
-                            console.log(err)
-                        })
+                            .then(stringConvertida => {
+                                this.props.setField('img', stringConvertida)
+                            })
+                            .catch(err => {
+                                console.log(err)
+                            })
                     }
 
                     this.setState({
                         isCameraRoll: false,
                     })
                 }}
-            />    
-                
+            />
+
         );
     }
 
-    async requestExternalStorageAccess(){ //permissões de acesso
-        try{
+    async requestExternalStorageAccess() { //permissões de acesso
+        try {
             const permissao = await PermissionsAndroid
                 .request(PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE);
 
-            if(permissao !== PermissionsAndroid.RESULTS.GRANTED){
+            if (permissao !== PermissionsAndroid.RESULTS.GRANTED) {
                 Alert.alert('Permissão negada');
-            }   
-        }catch(err){
+            }
+        } catch (err) {
             console.log(err);
         }
     }
 
-    viewCamera(){
-        return(
+    viewCamera() {
+        return (
             <View style={styles.container}>
-                <RNCamera 
+                <RNCamera
                     ref={ref => {
                         this.camera = ref;
                     }}
@@ -128,12 +126,12 @@ class NovoAmbienteScreen extends React.Component {
         )
     }
 
-    capturarFoto = async() => {
-        if(this.camera){
-            const options = {quality: 0.5, base64:true, forceUpOrientation:true, fixOrientation:true};
+    capturarFoto = async () => {
+        if (this.camera) {
+            const options = { quality: 0.5, base64: true, forceUpOrientation: true, fixOrientation: true };
             const data = await this.camera.takePictureAsync(options);
 
-            if(data){
+            if (data) {
                 this.props.setField('img', data.base64);
 
                 this.setState({
@@ -143,58 +141,65 @@ class NovoAmbienteScreen extends React.Component {
         }
     }
 
+    _goback() {
+        const { goBack } = this.props.navigation;
+        goBack();
+        setTimeout(function () { goBack() }, 500);
+    }
+
     viewForm() {
-        const {ambienteForm, setField, saveAmbiente, navigation} = this.props;
-        // console.log("cheguei", ambienteForm.img)
-        return(
-            
+        const { ambienteForm, setField, saveAmbiente, navigation } = this.props;
+
+        return (
+
             <ScrollView style={styles.viewcontainer}>
 
-            <HeaderDrawNav title='Informações' navigation={this.props.navigation}/>
-                
+                <HeaderDrawNav title='Informações' navigation={this.props.navigation} />
+
                 <FormRow>
                     <TextInput
                         style={styles.textinput}
                         placeholder="Título"
                         value={ambienteForm.title}
                         onChangeText={value => setField('title', value)}
-                    />    
+                    />
                 </FormRow>
 
                 <FormRow>
                     {
                         ambienteForm.img ?
-                        <Image 
-                            source={{uri: `data:image/jpeg;base64,${ambienteForm.img}`}}
-                            style={styles.img}
+                            <Image
+                                source={{ uri: `data:image/jpeg;base64,${ambienteForm.img}` }}
+                                style={styles.img}
                             />
-                        : null
+                            : null
                     }
 
-                    <View style={{paddingTop: 5}}>
+                    <View style={{ paddingTop: 5, flex: 0, width: 150, alignSelf: 'center', borderRadius: 5 }}>
                         <Button
                             title='Capturar imagem'
+                            color='#BD89EB'
                             onPress={() => {
                                 Alert.alert(
                                     'Captura de imagem',
                                     'De onde quer a imagem?',
                                     [
                                         {
-                                            text:'Câmera',
+                                            text: 'Câmera',
                                             onPress: () => {
-                                            this.setState({
-                                                isCamera:true
-                                            })
+                                                this.setState({
+                                                    isCamera: true
+                                                })
                                             }
                                         },
                                         {
-                                            text:'Galeria',
-                                            onPress: () =>{
+                                            text: 'Galeria',
+                                            onPress: () => {
                                                 this.setState({
-                                                    isCameraRoll:true
+                                                    isCameraRoll: true
                                                 })
                                             }
-                                        }   
+                                        }
                                     ]
                                 )
                             }}
@@ -226,40 +231,43 @@ class NovoAmbienteScreen extends React.Component {
                     this.state.isLoading ?
                         <ActivityIndicator />
                         :
-                        <Button
-                            title="Salvar"
-                            onPress={async () =>{
-                                this.setState({ isLoading: true })
+                        <View style={styles.button}>
+                            <Button
+                                title="Salvar"
+                                color='#BD89EB'
+                                onPress={async () => {
+                                    this.setState({ isLoading: true })
 
-                                try{
-                                    await saveAmbiente(ambienteForm);
-                                    navigation.goBack();
-                                }catch (error){
-                                    Alert.alert('Erro', error.message);
-                                } finally{
-                                    this.setState({ isLoading: false });
-                                }
+                                    try {
+                                        await saveAmbiente(ambienteForm);
+                                        this._goback()
+                                    } catch (error) {
+                                        Alert.alert('Erro', error.message);
+                                    } finally {
+                                        this.setState({ isLoading: false });
+                                    }
 
-                                }}/>
+                                }} />
+                        </View>
                 }
-                
+
             </ScrollView>
-            
+
         );
     }
-    
 
-    render(){
 
-        if(this.state.isCameraRoll){
-            return(this.viewGaleria())
+    render() {
+
+        if (this.state.isCameraRoll) {
+            return (this.viewGaleria())
         }
 
-        if(this.state.isCamera){
-            return(this.viewCamera())
+        if (this.state.isCamera) {
+            return (this.viewCamera())
         }
 
-        return(this.viewForm())
+        return (this.viewForm())
     }
 
 }
@@ -270,10 +278,11 @@ const styles = StyleSheet.create({
     textinput: {
         paddingLeft: 5,
         paddingRight: 5,
-        paddingBottom:5,
+        paddingBottom: 5,
     },
     viewcontainer: {
-        paddingTop: 15, 
+        backgroundColor: '#B15CFC',
+
     },
     img: {
         aspectRatio: 1,
@@ -298,23 +307,31 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         margin: 20,
     },
+
+    button: {
+        borderRadius: 5,
+        alignSelf: 'center',
+        flex: 0,
+        width: 250,
+        paddingTop: 30
+    }
 });
 
 
 
 const mapStateToProps = (state) => {
-    return({
+    return ({
         ambienteForm: state.ambienteForm
     })
-    
+
 }
 
 const mapDispatchToProps = {
     setField,
     saveAmbiente,
     setAllFields,
-    resetaForm
+    resetaForm,
 }
 
 
-export default connect(mapStateToProps, mapDispatchToProps) (NovoAmbienteScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(NovoAmbienteScreen);

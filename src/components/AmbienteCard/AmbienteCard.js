@@ -1,36 +1,36 @@
 import React from "react";
-import {View, 
+import {
+        View,
         Text,
-        StyleSheet, 
-        Image, 
-        Dimensions, 
-        TouchableOpacity
-    } from 'react-native';
+        StyleSheet,
+        Image,
+        Dimensions,
+        TouchableOpacity} from 'react-native';
 
 
-const AmbienteCard = ({ambiente, isLeft, onNavigate}) => {
+const AmbienteCard = ({ ambiente, isLeft, onNavigate }) => {
     return (
-    <TouchableOpacity 
-    onPress={onNavigate}
-    style={[
-        styles.container, 
-        isLeft ? styles.leftColumn : styles.rightColumn
-        ]}>
-        <View style={styles.card}>
-            <Image
-                source={
-                    {
-                        uri: `data:image/jpeg;base64,${ambiente.img}`
+        <TouchableOpacity
+            onPress={onNavigate}
+            style={[
+                styles.container,
+                isLeft ? styles.leftColumn : styles.rightColumn
+            ]}>
+            <View style={styles.card}>
+                <Image
+                    source={
+                        {
+                            uri: `data:image/jpeg;base64,${ambiente.img}`
+                        }
                     }
-                }
-                aspectRatio={1}
-                resizeMode="contain"
-            />
-            <View style={styles.cardTitleContainer}>
-                <Text style={styles.cardTitle}>{ ambiente.title }</Text>
+                    aspectRatio={1}
+                    resizeMode="contain"
+                />
+                <View style={styles.cardTitleContainer}>
+                    <Text style={styles.cardTitle}>{ambiente.title}</Text>
+                </View>
             </View>
-        </View>
-    </TouchableOpacity>
+        </TouchableOpacity>
     );
 };
 
@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
         // margin: 10,
 
     },
-    cardTitleContainer:{
+    cardTitleContainer: {
         backgroundColor: 'black',
         opacity: 0.8,
         width: '100%',
@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
         paddingRight: 5.5,
         alignItems: 'center',
     },
-    cardTitle:{
+    cardTitle: {
         color: '#FFF',
         fontSize: 15,
         fontWeight: 'bold',
@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
         paddingLeft: 10
     },
     rightColumn: {
-        paddingRight: 10,    
+        paddingRight: 10,
     },
 });
 

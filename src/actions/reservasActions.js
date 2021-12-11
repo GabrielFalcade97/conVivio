@@ -8,8 +8,28 @@ const setReservas = reservas => ({
     reservas: reservas
 })
 
+//mostra a lista de reservas
 export const watchReservas = () => {
     const { currentUser } = firebase.auth();
+
+    if (currentUser.email === "admin@admin.com") {
+        return dispatch => {
+            firebase
+                .database()
+                .ref(`users`)
+                .on("value", function (snapshot) {
+                    var reservas = { type: SET_RESERVAS, reservas: {} };
+                    snapshot.forEach(function (childSnapshot) {
+                        var childData = childSnapshot.val();
+                        if (childData.reservas) {
+                            Object.assign(reservas.reservas, childData.reservas)
+                        }
+                    });
+                    const action = setReservas(reservas);
+                    dispatch(reservas);
+                });
+        }
+    }
 
     return dispatch => {
         firebase
@@ -23,7 +43,7 @@ export const watchReservas = () => {
     }
 }
 
-
+//faz o cancelamento de reservas
 export const cancelReserva = reserva => {
 
     return dispatch => {

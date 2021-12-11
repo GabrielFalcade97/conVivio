@@ -9,13 +9,14 @@ export const setFieldRes = (field, value) => {
     }
 }
 
-export const RESERVA_SAVED = 'RESERVA_SAVED';
-export const reservaSaved = () =>{
-    return{
-        type: RESERVA_SAVED
+export const RESERVA_SALVA = 'RESERVA_SALVA';
+export const reservaSalva = () => {
+    return {
+        type: RESERVA_SALVA
     }
 }
 
+//para todos os campos que devem estar na reserva 
 export const SET_ALL_FIELDS_RES = 'SET_ALL_RESERVAS';
 export const setAllFieldsRes = reserva => ({
     type: SET_ALL_FIELDS_RES,
@@ -23,21 +24,26 @@ export const setAllFieldsRes = reserva => ({
 });
 
 export const saveReserva = reserva => {
-    const {currentUser} = firebase.auth();
+    const { currentUser } = firebase.auth();
 
     return async dispatch => {
-        if(reserva.id){
+        if (reserva.id) {
             await firebase
-            .database()
-            .ref(`/users/${currentUser.uid}/reservas/${reserva.id}`)
-            .set(reserva);
+                .database()
+                .ref(`/users/${currentUser.uid}/reservas/${reserva.id}`)
+                .set(reserva);
         } else {
             await firebase
-            .database()
-            .ref(`/users/${currentUser.uid}/reservas`)
-            .push(reserva);
+                .database()
+                .ref(`/users/${currentUser.uid}/reservas`)
+                .push(reserva);
 
-            dispatch(reservaSaved());
+            dispatch(reservaSalva());
         }
     }
 }
+
+export const RESETA_FORM_RES = 'RESETA_FORM_RES';
+export const resetaFormRes = () => ({
+    type: RESETA_FORM_RES
+})

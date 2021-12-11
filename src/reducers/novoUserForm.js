@@ -9,9 +9,9 @@ const INITIAL_STATE = {
     repetir_senha: ''
 }
 
-export default function(state = INITIAL_STATE, action){
-    switch(action.type) {
-        case USER_SAVED: 
+export default function (state = INITIAL_STATE, action) {
+    switch (action.type) {
+        case USER_SAVED:
             return INITIAL_STATE;
         default:
             return state;

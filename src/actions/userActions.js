@@ -3,88 +3,89 @@ import { Alert } from 'react-native';
 
 
 
-export const USER_LOGIN_SUCCESS = 'USER_LOGIN';
-const userLogin_Success = user => ({
-    type: USER_LOGIN_SUCCESS,
-    user
+export const USER_LOGIN_SUCESSO = 'USER_LOGIN';
+const userLogin_Sucesso = user => ({
+  type: USER_LOGIN_SUCESSO,
+  user
 });
 
+//acesso login (podendo ou não criar uma conta)
+export const acessoLogin = ({ email, password }) => dispatch => {
 
-export const acessoLogin = ({email, password}) => dispatch =>{
-
-    return firebase
+  return firebase
     .auth()
     .signInWithEmailAndPassword(email, password)
     .then(user => {
-        let uid = user.user.uid;
-        return firebase
-          .database()
-          .ref('users')
-          .child(uid)
-          .once('value')
-          .then((snapshot) => {
-            let user = {
-              uid,
-              nome_completo: snapshot.val().nome_completo,
-              email: snapshot.val().email,
-              apartamento: snapshot.val().apartamento
-            };
-            const action = userLogin_Success(user)
-            dispatch(action);
-            return user;
-          });
+      let uid = user.user.uid;
+      return firebase
+        .database()
+        .ref('users')
+        .child(uid)
+        .once('value')
+        .then((snapshot) => {
+          let user = {
+            uid,
+            nome_completo: snapshot.val().nome_completo,
+            email: snapshot.val().email,
+            apartamento: snapshot.val().apartamento
+          };
+          const action = userLogin_Sucesso(user)
+          dispatch(action);
+          return user;
+        });
     })
     .catch(error => {
-        alert (error)
-        if(error.code == "auth/user-not-found") {
-            return new Promise((resolve, reject) => {
-              Alert.alert(
-                "Usuário não encontrado",
-                "Deseja criar um novo usuário?",
-                [{
-                  text: 'Não',
-                  onPress: () => {
-                    resolve();
-                  }
-                },{
-                  text: 'Sim',
-                  onPress: () => {
-                    firebase
-                      .auth()
-                      .createUserWithEmailAndPassword(email, password)
-                      .then(resolve)
-                      .catch(reject)
-                  }
-                }],
-                        {cancelable: true}
-                    );
-            })   
-        }
-        return Promise.reject(error);
+      alert(error)
+      if (error.code == "auth/user-not-found") {
+        return new Promise((resolve, reject) => {
+          Alert.alert(
+            "Usuário não encontrado",
+            "Deseja criar um novo usuário?",
+            [{
+              text: 'Não',
+              onPress: () => {
+                resolve();
+              }
+            }, {
+              text: 'Sim',
+              onPress: () => {
+                firebase
+                  .auth()
+                  .createUserWithEmailAndPassword(email, password)
+                  .then(resolve)
+                  .catch(reject)
+              }
+            }],
+            { cancelable: true }
+          );
+        })
+      }
+      return Promise.reject(error);
     })
 }
 
 
 //Novo
-export const signUp = (email = '', password = '', nome_completo = '', apartamento = '') => dispatch => {
+
+//Criação de usuário 
+export const inscrever = (email = '', password = '', nome_completo = '', apartamento = '') => dispatch => {
   return new Promise((resolve, reject) => {
-    if(email === '' || password === ''){
+    if (email === '' || password === '') {
       Alert.alert(
         'Campos obrigatórios',
         'Informe os dados para realizar o cadastro'
       );
-    }else{
+    } else {
       firebase
         .auth()
         .createUserWithEmailAndPassword(email, password)
-        .then( (value) => {
+        .then((value) => {
           let uid = value.user.uid;
-          console.log("uid", uid)
           firebase
             .database()
             .ref('users')
             .child(uid)
-            .set({nome_completo, apartamento, email: value.user.email})
+            .set({ nome_completo, apartamento, email: value.user.email })
             .then(() => {
               let user = {
                 uid,
@@ -92,7 +93,7 @@ export const signUp = (email = '', password = '', nome_completo = '', apartament
                 apartamento,
                 email: value.user.email,
               };
-              const action = userLogin_Success(user)
+              const action = userLogin_Sucesso(user)
               dispatch(action);
               resolve(user);
             });
@@ -103,16 +104,16 @@ export const signUp = (email = '', password = '', nome_completo = '', apartament
         });
     }
   })
-  
+
 }
 
 export const signIn = async (email = '', password = '') => {
-  if(email === '' || password === '') {
+  if (email === '' || password === '') {
     Alert.alert(
       'Campos obrigatórios',
       'Informe os dados para realizar login'
     );
-  }else{
+  } else {
     await firebase
       .auth()
       .signInWithEmailAndPassword(email, password)
@@ -130,7 +131,7 @@ export const signIn = async (email = '', password = '') => {
               email: value.user.email,
               apartamento: snapshot.val().apartamento
             };
-            storageUser({data});
+            storageUser({ data });
           });
       })
       .catch((error) => {
@@ -139,36 +140,20 @@ export const signIn = async (email = '', password = '') => {
   }
 }
 
-// firebase.auth().onAuthStateChanged(function(user){
-//   if(user){
-//     //user is signed in.
-//     var nome_completo = user.nome_completo;
-//     var email = user.email;
-//     var apartamento = user.apartamento;
-//     var uid = user.uid;
-//     var providerData = user.providerData;
-//   }else{
-//     //user is signed out
-//   }
-// });
+export const currentUser = () => dispatch => {
+  var user = firebase.auth().currentUser;
 
-// firebase.auth().signOut().then(function() {
-//   console.log('Deslogado');
-// }).catch(function(error){
-//   console.log(error);
-// })
+  if (user) {
+    if (user != null) {
+      return ({
+        user: {
+          nome_completo: user.nome_completo,
+          email: user.email,
+          id: user.uid,
+        }
+      })
+    }
+  }
+}
 
-// var user = firebase.auth().currentUser;
 
-// if(user) {
-//   //user is signed in
-//   if(user != null){
-//     nome_completo = user.nome_completo;
-//     email = user.email;
-//     apartamento = user.apartamento
-//     uid = user.uid;
-
-//   }else {
-//     //no user is signed in
-//   }
-// }

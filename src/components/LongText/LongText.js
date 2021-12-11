@@ -1,9 +1,9 @@
 import React from 'react';
-import {View, 
-        Text, 
+import {
+        View,
+        Text,
         StyleSheet,
-        TouchableWithoutFeedback
-      } from 'react-native';
+        TouchableWithoutFeedback} from 'react-native';
 
 
 
@@ -17,8 +17,8 @@ export default class LognText extends React.Component {
     }
   }
 
-  changeIsExpanded(){
-    const {isExpanded} = this.state;
+  changeIsExpanded() {
+    const { isExpanded } = this.state;
 
     this.setState({
       isExpanded: !isExpanded
@@ -27,28 +27,28 @@ export default class LognText extends React.Component {
 
 
 
-  render(){
-    const {label = "", content = ""} = this.props;
-    const {isExpanded} = this.state;
+  render() {
+    const { label = "", content = "" } = this.props;
+    const { isExpanded } = this.state;
 
-    return(
+    return (
       <View style={styles.line}>
-        <Text style={[styles.cell, 
-                      styles.label, 
+        <Text style={[styles.cell,
+        styles.label,
         ]}>{label}</Text>
 
-      <TouchableWithoutFeedback onPress={() => this.changeIsExpanded()}>
-        <View>
-          <Text style={[
-            styles.cell, 
-            styles.content,
-            isExpanded ? styles.expanded :styles.collapsed
+        <TouchableWithoutFeedback onPress={() => this.changeIsExpanded()}>
+          <View>
+            <Text style={[
+              styles.cell,
+              styles.content,
+              isExpanded ? styles.expanded : styles.collapsed
             ]}>{content}
-          </Text>
-        </View>
-      </TouchableWithoutFeedback> 
+            </Text>
+          </View>
+        </TouchableWithoutFeedback>
 
-      </View>       
+      </View>
     );
   }
 }

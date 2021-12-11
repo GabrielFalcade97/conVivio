@@ -1,14 +1,14 @@
 import * as React from 'react';
-import { View, 
-         Text, 
-         Button, 
-         StyleSheet, 
-         ActivityIndicator, 
-        } from 'react-native';
+import {
+        View,
+        Text,
+        Button,
+        StyleSheet,
+        ActivityIndicator} from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
 import FormRow from '../../components/FormRow/FormRow';
-import {connect} from 'react-redux';
-import { acessoLogin} from '../../actions';
+import { connect } from 'react-redux';
+import { acessoLogin } from '../../actions';
 
 
 
@@ -26,73 +26,78 @@ class Login extends React.Component {
     }
 
 
-    onChangeHandler(field, valor){
+    onChangeHandler(field, valor) {
         this.setState({
-            [field]:valor
+            [field]: valor
         })
     }
 
-    acessoLogin(){ 
+    //faz a verficação de acesso e se caso esteja tudo certo entra no app
+    acessoLogin() {
         this.setState({ isLoading: true });
-        const{email, password} = this.state;  
+        const { email, password } = this.state;
 
-        this.props.acessoLogin({email, password})
-         .then( user => {
-             if(user){
+        this.props.acessoLogin({ email, password })
+            .then(user => {
+                if (user) {
+                    this.setState({
+                        isLoading: false,
+                        message: ''
+                    })
+                    this.props.navigation.navigate('Menu');
+                } else {
+                    this.setState({
+                        isLoading: false,
+                        message: '',
+                    })
+                }
+            })
+            .catch(error => {
                 this.setState({
                     isLoading: false,
-                    message: ''})
-            this.props.navigation.navigate('Menu');
-            } else {
-                this.setState({
-                    isLoading: false,
-                    message: '',
-                })
-            }  
-         })
-         .catch(error => {
-            this.setState({
-                isLoading: false,
-                message: this.getMessageByError(error.code)
+                    message: this.getMessageByError(error.code)
                 });
-         })
+            })
     }
 
-    getMessageByError(code){
-        switch(code){
+    //pega a mensagem de erro e demonstra ao usuário o erro ocorrido ou se é um erro desconhecido
+    getMessageByError(code) {
+        switch (code) {
             case "auth/user-not-found":
                 return "E-mail não cadastrado.";
-            case "auth/wrong-password":    
+            case "auth/wrong-password":
                 return "Senha incorreta.";
             default:
-                return "Erro desconhecido";    
+                return "Erro desconhecido";
         }
     }
 
-    renderButton(){
-        if(this.state.isLoading)
-            return <ActivityIndicator />    
-        return(
+    //renderiza o botão para que o usuário entre com seu login cadastrado
+    renderButton() {
+        if (this.state.isLoading)
+            return <ActivityIndicator />
+        return (
             <View style={styles.buttonEntrar}>
-                <Button 
+                <Button o
                     color='#BD89EB'
-                    title="ENTRAR" 
+                    title="ENTRAR"
                     onPress={() => this.acessoLogin()} />
             </View>
         )
     }
 
-    renderMessage(){
-        const {message} = this.state;
+    //renderiza as mensagens de erro caso usuário não insira informações corretas
+    renderMessage() {
+        const { message } = this.state;
 
-        if(!message)
+        if (!message)
             return null;
 
-        return(
+        return (
             <View>
                 <Text>{message}</Text>
             </View>
-        )    
+        )
     }
 
 
@@ -128,10 +133,10 @@ class Login extends React.Component {
                 {this.renderMessage()}
 
                 <View style={styles.button}>
-                    <Button 
-                    title="CRIAR CONTA"
-                    color='#BD89EB'
-                    onPress={() => this.props.navigation.navigate('novoUsuario')} />
+                    <Button
+                        title="CRIAR CONTA"
+                        color='#BD89EB'
+                        onPress={() => this.props.navigation.navigate('novoUsuario')} />
                 </View>
 
             </View>
@@ -151,8 +156,8 @@ const styles = StyleSheet.create({
         margin: 0,
         alignItems: 'center',
         borderRadius: 5,
-        
-        
+
+
     },
 
     textPrinc: {
@@ -162,9 +167,9 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         paddingTop: 45,
         paddingBottom: 25
-        
+
     },
-    
+
     viewLog: {
         backgroundColor: '#B15CFC',
     },
@@ -176,11 +181,13 @@ const styles = StyleSheet.create({
         paddingBottom: 10,
         paddingLeft: 5.5,
         paddingRight: 5.5,
-        alignItems: 'center',
-        borderRadius: 8,
         paddingTop: 45,
-        alignItems: 'center',
-        
+        alignSelf: 'center',
+        flex: 0,
+        width: 250,
+        borderRadius: 5
+
+
     },
 
     buttonEntrar: {
@@ -189,16 +196,19 @@ const styles = StyleSheet.create({
         paddingBottom: 10,
         paddingLeft: 5.5,
         paddingRight: 5.5,
-        alignItems: 'center',
         borderRadius: 8,
         paddingTop: 45,
-        
-        
+        alignSelf: 'center',
+        flex: 0,
+        width: 250,
+        borderRadius: 5
+
+
     },
 
-    
-    
+
+
 
 })
 
-export default connect(null, {acessoLogin})(Login);
+export default connect(null, { acessoLogin })(Login);

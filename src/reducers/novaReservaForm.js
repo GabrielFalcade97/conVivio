@@ -1,4 +1,4 @@
-import { SET_FIELD_RES, RESERVA_SAVED, SET_ALL_FIELDS_RES } from "../actions";
+import { SET_FIELD_RES, RESERVA_SALVA, SET_ALL_FIELDS_RES, RESETA_FORM_RES } from "../actions";
 
 const INITIAL_STATE_RES = {
     id: null,
@@ -7,17 +7,19 @@ const INITIAL_STATE_RES = {
     ambiente: ''
 }
 
-export default function(state = INITIAL_STATE_RES, action){
-    switch(action.type) {
+export default function (state = INITIAL_STATE_RES, action) {
+    switch (action.type) {
         case SET_FIELD_RES:
-            const clonedState = {...state};
-            clonedState[action.field]= action.value;
+            const clonedState = { ...state };
+            clonedState[action.field] = action.value;
             return clonedState;
-        case RESERVA_SAVED:
+        case RESERVA_SALVA:
             return INITIAL_STATE_RES;
         case SET_ALL_FIELDS_RES:
             return action.reserva;
-        default: 
+        case RESETA_FORM_RES:
+            return INITIAL_STATE_RES;
+        default:
             return state;
     }
 }

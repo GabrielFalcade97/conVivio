@@ -3,8 +3,7 @@ import {View,
         StyleSheet, 
         Image, 
         Dimensions, 
-        TouchableOpacity
-    } from 'react-native';
+        TouchableOpacity} from 'react-native';
 
 
 const AddCard = ({isLeft, onNavigate}) => {

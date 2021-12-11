@@ -1,12 +1,17 @@
 import * as React from 'react';
-import { View, Text, Button, ScrollView, ActivityIndicator, FlatList } from 'react-native';
+import { View, 
+         Text,  
+         Button, 
+         StyleSheet, 
+         ScrollView, 
+         FlatList } from 'react-native';
 import HeaderDrawNav from '../../components/headerDrawNav/headerDrawNav';
-import AddCard from '../../components/AddCard/AddCard';
-import ReservaCard from '../../components/ReservaCard/ReservaCard'
 import { watchReservas } from '../../actions/reservasActions'
 import { connect } from 'react-redux';
 
 const isLeft = num => num % 2 === 0;
+
+
 
 class Reserva extends React.Component {
 
@@ -20,41 +25,42 @@ class Reserva extends React.Component {
 
     render() {
 
-        // if (this.props.reservas === null) {
-        //     return <ActivityIndicator />
-        // }
+
 
         return (
-            <View>
+            <ScrollView style={styles.view}>
 
                 <HeaderDrawNav title='Reservas' navigation={this.props.navigation} />
 
-                {/* <FlatList
-                    data={[...this.props.reservas, { isLast: true }]}
-                    renderItem={({ item, index }) => {
-                        return (
-                            item.isLast ?
-                                <AddCard
-                                    onNavigate={() => this.props.navigation.navigate('novaReservaScreen')}
-                                />
-                                :
-                                <ReservaCard
-                                    ambiente={item}
-                                    isLeft={isLeft(index)}
-                                    onNavigate={() => this.props.navigation.navigate('reservaDetalhe', { reserva: item })}
-                                />
-                        );
-                    }}
+                <View style={styles.view}>
 
-                    keyExtractor={item => item.id}
-                    numColumns={2}
-                /> */}
+                    <View style={styles.texto}>
+                        <Text style={styles.txt}>Clique em uma data de reserva</Text>
+                        <Text style={styles.txt}>_____________________________________</Text>
+                    </View>
 
-                                <AddCard
-                                    onNavigate={() => this.props.navigation.navigate('novaReservaScreen')}
-                                />
 
-            </View>
+                    {this.props.reservas !== null && <FlatList
+                        data={[...this.props.reservas, { isLast: true }]}
+                        renderItem={({ item }) =>
+                            <Text
+                                onPress={() => this.props.navigation.navigate('reservaDetalhe', { reserva: item })} style={styles.item}>{item.data}</Text>}
+
+                        keyExtractor={item => item.id}
+                    />
+                    }
+
+                    <View style={styles.btn}>
+                        <Button
+                            color='#BD89EB'
+                            title="Nova reserva"
+                            onPress={() => this.props.navigation.navigate('novaReservaScreen')}
+                        />
+                    </View>
+
+                </View>
+
+            </ScrollView>
         )
     }
 }
@@ -70,10 +76,43 @@ const mapStateToProps = state => {
     const listaReservasComId = keys.map(key => {
         return { ...listaReservas[key], id: key }
     })
+
     return { reservas: listaReservasComId };
 }
 
 export default connect(
     mapStateToProps,
-    { watchReservas}
+    { watchReservas }
 )(Reserva)
+
+const styles = StyleSheet.create({
+    item: {
+        padding: 10,
+        fontSize: 18,
+        height: 44,
+    },
+
+    view: {
+        backgroundColor: '#B15CFC',
+    },
+
+    txt: {
+        fontSize: 18,
+        paddingTop: 10,
+        flex: 1,
+        textAlign: 'center',
+        color: "#ece1e1",
+    },
+
+    texto: {
+        padding: 15,
+    },
+
+    btn: {
+        alignSelf: 'center',
+        flex: 0,
+        width: 150,
+        borderRadius: 5
+    }
+
+});

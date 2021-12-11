@@ -1,4 +1,4 @@
-import {combineReducers} from "redux";
+import { combineReducers } from "redux";
 import userReducer from './userReducer'
 import NovoAmbienteForm from "./novoAmbienteForm";
 import ambienteReducer from "./ambienteReducer";
